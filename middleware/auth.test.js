@@ -6,6 +6,7 @@ const {
   authenticateJWT,
   ensureLoggedIn,
   ensureAdmin,
+  ensureCorrectUserOrAdmin
 } = require("./auth");
 
 
@@ -112,3 +113,15 @@ describe("ensureAdmin", function () {
     ensureAdmin(req, res, next);
   });
 });
+
+describe("ensureCorrectUserOrAdmin", function() {
+  test("works", function(){
+    expect.assertions(1);
+    const req = {params: {username: "test"}}
+    const res = {locals: {user: {username: "test", isAdmin: true}}};
+    const next = function(err){
+      expect(err).toBeFalsy();
+    };
+    ensureCorrectUserOrAdmin(req,res,next)
+  })
+})
