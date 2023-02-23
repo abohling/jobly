@@ -14,6 +14,7 @@ const {
   u1Token,
   u2Token,
   adminToken,
+  testJobIds,
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -335,8 +336,32 @@ describe("DELETE /users/:username", function () {
 
 /************************************** post /users/:username/jobs/:id */
 
-// describe("Post /users/:username/jobs/:id", function() {
-//   test("works for admin", async function() {
-//     const resp =
-//   })
-// } );
+describe("Post /users/:username/jobs/:id", function () {
+  test("works for admin", async function () {
+    const resp = await request(app)
+      .post(`/users/u1/jobs/${testJobIds[1]}`)
+      .set("authorization", `Bearer ${adminToken}`);
+    expect(resp.body).toEqual({ applied: testJobIds[1] });
+  });
+
+  test("unauth for users", async function () {
+    const resp = await request(app)
+      .post(`/users/u1/jobs/${testJobIds[1]}`)
+      .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.statusCode).toEqual(401);
+  });
+
+  test("username not found", async function () {
+    const resp = await request(app)
+      .post(`/users/nothing/jobs/${testJobIds[1]}`)
+      .set("authorization", `Bearer ${adminToken}`);
+    expect(resp.statusCode).toEqual(404);
+  });
+
+  test("job not found", async function () {
+    const resp = await request(app)
+      .post(`/users/nothing/jobs/0`)
+      .set("authorization", `Bearer ${adminToken}`);
+    expect(resp.statusCode).toEqual(404);
+  });
+});
