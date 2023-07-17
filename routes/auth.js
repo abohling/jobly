@@ -23,7 +23,7 @@ router.post("/token", async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userAuthSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
 
@@ -35,7 +35,6 @@ router.post("/token", async function (req, res, next) {
     return next(err);
   }
 });
-
 
 /** POST /auth/register:   { user } => { token }
  *
@@ -50,7 +49,7 @@ router.post("/register", async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userRegisterSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
 
@@ -62,5 +61,8 @@ router.post("/register", async function (req, res, next) {
   }
 });
 
-
 module.exports = router;
+
+// {
+// 	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRoaW5nNCIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE2ODM1OTc5MzZ9.1pfRgXGwU5TPpoJV2l3e679BJfUB7u2UVuSfTpBYPpM"
+// }
